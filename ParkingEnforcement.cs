@@ -1,3 +1,14 @@
+/*
+ * Parking Violations Simulator
+ * 
+ * This program simulates a police officer checking for parking violations in a parking lot.
+ * The program creates 10 parked cars, each with their own parking meter. The officer checks
+ * each parking spot and issues citations to cars that have expired meters.
+ * 
+ * Author: [Your Name]
+ * Date: [Current Date]
+ */
+
 using System;
 using System.Threading;
 using System.Collections.Generic;
@@ -42,6 +53,7 @@ namespace ParkingViolations
             minutesElapsed = 0;
             officerLocation = 0;
 
+            // Initialize parked cars and their meters
             car1 = new ParkedCar("Chevrolet", "Sonic", "Silver", "WB8RDN");
             car2 = new ParkedCar("Toyota", "Corolla", "White", "NATY769");
             car3 = new ParkedCar("Honda", "Civic", "Black", "HGJEK87");
@@ -66,6 +78,13 @@ namespace ParkingViolations
 
             cop = new PoliceOfficer("John Friendly", 42050);
         }
+        
+          /*
+         * Advances the simulation to the next round, which is 10 minutes later.
+         * If the current time is 50 minutes past the hour, it rolls over to the
+         * next hour. The officer also moves to the next parking spot.
+         */
+        
         public void advanceRound()
         {
             minutesElapsed += 10;
