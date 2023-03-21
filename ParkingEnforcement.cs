@@ -86,10 +86,6 @@ namespace ParkingViolations
             else
                 officerLocation++;
         }
-        public int getMinutesElapsed()
-        {
-            return minutesElapsed;
-        }
         public string getTime()
         {
             string returnString;
