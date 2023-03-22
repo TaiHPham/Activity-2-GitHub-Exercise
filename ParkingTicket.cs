@@ -1,26 +1,13 @@
 ﻿using System;
+
+// This code defines a class called ParkingTicket
 public class ParkingTicket
 {
-    private ParkedCar parkedCar;
-    private PoliceOfficer officer;
-    private int minutesOverParked;
-    private decimal fineAmount;
-
-    public ParkingTicket(ParkedCar parkedCar, PoliceOfficer officer, int minutesOverParked, decimal fineAmount)
+    // This is a constructor method that takes four parameters
+    public ParkingTicket(ParkedCar parkedCar, int MinutesOver, string copName, int copBadge)
     {
-        this.parkedCar = parkedCar;
-        this.officer = officer;
-        this.minutesOverParked = minutesOverParked;
-        this.fineAmount = fineAmount;
-    }
-
-    public override string ToString()
-    {
-        return $"--------------------------------------------\n" +
-               $"Car: {parkedCar}\n" +
-               $"Officer: {officer}\n" +
-               $"Fine: ${fineAmount}\n" +
-               $"Minutes over parked: {minutesOverParked}\n" +
-               $"--------------------------------------------";
+        decimal fine = 25m + .16m * MinutesOver;
+        string Output = parkedCar.GetCarInfo() + "\nMinutes Over: " + MinutesOver + "\nFine: $" + fine.ToString() + "\nOfficer: " + copName + ", Badge# " + copBadge;
+        Console.WriteLine(Output);
     }
 }

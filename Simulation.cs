@@ -4,13 +4,79 @@ using System.Threading;
 
 public class Simulation
 {
-    private int minute = 0;
-    private int hour = 10;
-    private int minutesElapsed = 0;
+    private ParkedCar car1;
+    private ParkedCar car2;
+    private ParkedCar car3;
+    private ParkedCar car4;
+    private ParkedCar car5;
+    private ParkedCar car6;
+    private ParkedCar car7;
+    private ParkedCar car8;
+    private ParkedCar car9;
+    private ParkedCar car10;
 
+    private ParkingMeter meter1;
+    private ParkingMeter meter2;
+    private ParkingMeter meter3;
+    private ParkingMeter meter4;
+    private ParkingMeter meter5;
+    private ParkingMeter meter6;
+    private ParkingMeter meter7;
+    private ParkingMeter meter8;
+    private ParkingMeter meter9;
+    private ParkingMeter meter10;
+
+    private PoliceOfficer officer;
+
+    private int hour;
+    private int minute;
+    private int minutesElapsed;
+    private int officerLocation;
+
+    public Simulation()
+    {
+        minute = 0;
+        hour = 10; //cop starts his day at 10am
+        minutesElapsed = 0;
+        officerLocation = 0;
+
+        // Create a police officer
+        officer = new PoliceOfficer("John Smith", 123456);
+
+        car1 = new ParkedCar("Chevrolet", "Sonic", "Silver", "WB8RDN");
+        car2 = new ParkedCar("Toyota", "Corolla", "White", "NATY769");
+        car3 = new ParkedCar("Honda", "Civic", "Black", "HGJEK87");
+        car4 = new ParkedCar("Mini", "Cooper", "Blue", "MYMINI1");
+        car5 = new ParkedCar("Ford", "F350", "Orange", "PWNLIBS");
+        car6 = new ParkedCar("Subaru", "Forester", "White", "PIEJ888");
+        car7 = new ParkedCar("Jeep", "Wrangler", "Gray", "WXYZ72S");
+        car8 = new ParkedCar("Nissan", "Rogue", "Green", "HS667ZV");
+        car9 = new ParkedCar("Tesla", "Model S", "Red", "LUV_ELON");
+        car10 = new ParkedCar("GMC", "Sierra", "Silver", "KD4SRW");
+
+        meter1 = new ParkingMeter(30);
+        meter2 = new ParkingMeter(0);
+        meter3 = new ParkingMeter(45);
+        meter4 = new ParkingMeter(60);
+        meter5 = new ParkingMeter(0);
+        meter6 = new ParkingMeter(180);
+        meter7 = new ParkingMeter(120);
+        meter8 = new ParkingMeter(60);
+        meter9 = new ParkingMeter(0);
+        meter10 = new ParkingMeter(90);
+    }
+
+/*
+* Advances the simulation to the next round, which is 10 minutes later.
+* If the current time is 50 minutes past the hour, it rolls over to the
+* next hour. The officer also moves to the next parking spot.
+*/
     public void advanceRound()
     {
+        // Increment minutes elapsed
         minutesElapsed += 10;
+
+        // Check if the minute is 50. If so, reset the minute and increment the hour
         if (minute == 50)
         {
             minute = 0;
@@ -21,18 +87,27 @@ public class Simulation
         }
         else
             minute += 10;
+
+        // Assuming there are 10 parking spots, move the officer to the next spot
+        if (officerLocation == 9)
+            officerLocation = 0;
+        else
+            officerLocation++;
     }
 
+    // This method returns the current time in a formatted string.
     public string getTime()
     {
         string returnString;
         string minuteString;
 
+        // Format the minute as a string with leading 0 if necessary
         if (minute == 0)
             minuteString = "00";
         else
             minuteString = minute.ToString();
 
+        // Format the hour as a string with AM/PM designation
         if (hour == 0)
             returnString = "12:" + minuteString + " AM";
         else if (hour > 0 && hour < 12)
@@ -41,96 +116,44 @@ public class Simulation
             returnString = hour.ToString() + ":" + minuteString + " PM";
         else
             returnString = (hour - 12).ToString() + ":" + minuteString + " PM";
+
+        // Return the formatted time string.
         return returnString;
     }
 
+    // This method simulates the specified number of rounds of the parking lot scenario
     public void Simulate(int Rounds)
     {
-        // Create a police officer
-        PoliceOfficer officer = new PoliceOfficer("John Smith", "123456");
+        List<ParkedCar> Cars = new List<ParkedCar>() { car1, car2, car3, car4, car5, car6, car7, car8, car9, car10 };
+        List<ParkingMeter> Meters = new List<ParkingMeter>() { meter1, meter2, meter3, meter4, meter5, meter6, meter7, meter8, meter9, meter10 };
 
-        int[] randParkedTime = new int[10];
-        int[] randMeterTime = new int[10];
-        Random rand = new Random();
-        int randNum;
-
-        // Simulate a random number of minutes parked
-        for (int i = 0; i < randParkedTime.Length; i++)
+        while (Rounds > 0)
         {
-            randNum = rand.Next(1, 240);
-            randParkedTime[i] = randNum;
-        }
-
-        ParkedCar car1 = new ParkedCar("Toyota", "Supra", "Black", "ABC123", randParkedTime[0]);
-        ParkedCar car2 = new ParkedCar("Porsche", "911", "Silver", "DEF456", randParkedTime[1]);
-        ParkedCar car3 = new ParkedCar("Honda", "Civic Type R", "White", "GHI789", randParkedTime[2]);
-        ParkedCar car4 = new ParkedCar("Ford", "Mustang", "Black", "FGD793", randParkedTime[3]);
-        ParkedCar car5 = new ParkedCar("Tesla", "Model S", "Gray", "DZF456", randParkedTime[4]);
-        ParkedCar car6 = new ParkedCar("Nissian", "GTR", "Blue", "VBD583", randParkedTime[5]);
-        ParkedCar car7 = new ParkedCar("Toyota", "86", "Black", "AHE345", randParkedTime[6]);
-        ParkedCar car8 = new ParkedCar("Ford", "Mustang", "Silver", "RJK984", randParkedTime[7]);
-        ParkedCar car9 = new ParkedCar("Dodge", "Challenger", "Yellow", "PRL483", randParkedTime[8]);
-        ParkedCar car10 = new ParkedCar("Ferrari", "F8", "Red", "UIN659", randParkedTime[9]);
-
-        // Simulate a random number of minutes purchased
-        for (int i = 0; i < randMeterTime.Length; i++)
-        {
-            randNum = rand.Next(1, 240);
-            randMeterTime[i] = randNum;
-        }
-
-        ParkingMeter meter1 = new ParkingMeter(randMeterTime[0]);
-        ParkingMeter meter2 = new ParkingMeter(randMeterTime[1]);
-        ParkingMeter meter3 = new ParkingMeter(randMeterTime[2]);
-        ParkingMeter meter4 = new ParkingMeter(randMeterTime[3]);
-        ParkingMeter meter5 = new ParkingMeter(randMeterTime[4]);
-        ParkingMeter meter6 = new ParkingMeter(randMeterTime[5]);
-        ParkingMeter meter7 = new ParkingMeter(randMeterTime[6]);
-        ParkingMeter meter8 = new ParkingMeter(randMeterTime[7]);
-        ParkingMeter meter9 = new ParkingMeter(randMeterTime[8]);
-        ParkingMeter meter10 = new ParkingMeter(randMeterTime[9]);
-
-        List<(ParkedCar, ParkingMeter)> parkingLot = new List<(ParkedCar, ParkingMeter)>
-        {
-            (car1, meter1),
-            (car2, meter2),
-            (car3, meter3),
-            (car4, meter4),
-            (car5, meter5),
-            (car6, meter6),
-            (car7, meter7),
-            (car8, meter8),
-            (car9, meter9),            
-            (car10, meter10)
-        };
-
-
-        for (int i = 1; i <= Rounds; i++)
-        {
-            // Check one parking spot per round
-            int spotToCheck = (i - 1) % parkingLot.Count;
-            (ParkedCar car, ParkingMeter meter) = parkingLot[spotToCheck];
-
+            // Decrement rounds, pause for 1.5 seconds, and output the current time
+            --Rounds;
             Thread.Sleep(1000);
             Console.WriteLine("Time: " + getTime());
-            Console.WriteLine($"Checking parking spot #{spotToCheck + 1}");
 
-            // Check if the car has expired
-            if (officer.CheckForViolation(car, meter))
+            // Check the current parking spot for violations.
+            Console.WriteLine("Inspecting Spot #" + (officerLocation + 1).ToString());
+            if (officer.CheckForViolation(Cars[officerLocation], Meters[officerLocation]) == true)
             {
-                // Issue a ticket
-                ParkingTicket ticket = officer.IssueParkingTicket(car, meter);
-                Console.WriteLine(ticket.ToString());
+                // If a violation is detected, issue a parking ticket
+                Console.WriteLine("Issuing Citation\n----------------");
+                officer.IssueParkingTicket(Cars[officerLocation], Meters[officerLocation]);
+                Console.WriteLine("\n\n");
             }
             else
             {
-                Console.WriteLine("--------------------------------------------");
-                Console.WriteLine("No violation detected");
-                Console.WriteLine("--------------------------------------------");
+                // If no violation is detected, output a message
+                Console.WriteLine("No violation detected.\n\n");
             }
+
+            // Advance the simulation by one round and add 10 minutes to each parked car's time
             advanceRound();
-            Console.WriteLine();
+            foreach (ParkedCar car in Cars)
+                car.AddParkedMinutes(10);
+
         }
-        Console.ReadLine();
     }
 }

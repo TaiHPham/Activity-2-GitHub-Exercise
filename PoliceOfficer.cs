@@ -1,40 +1,38 @@
-﻿using System;
+﻿
+// This code defines a class called PoliceOfficer
 public class PoliceOfficer
 {
-    // Attributes
     private string name;
-    private string badgeNumber;
+    private int badgeNumber;
 
-    // Constructor
-    public PoliceOfficer(string name, string badgeNumber)
+    // This is a constructor method that takes two parameters
+    public PoliceOfficer(string Name, int BadgeNumber)
     {
-        this.name = name;
-        this.badgeNumber = badgeNumber;
+        name = Name;
+        badgeNumber = BadgeNumber;
     }
 
+    // This method overrides the ToString() method and returns a string representation of the PoliceOfficer object
     public override string ToString()
     {
         return $"{name} - Badge #: {badgeNumber}";
     }
 
+    // This method checks for a violation given a ParkedCar and ParkingMeter object
     public bool CheckForViolation(ParkedCar parkedCar, ParkingMeter parkingMeter)
     {
-        int parkedMinutes = parkedCar.GetParkedMinutes();
-        int purchasedMinutes = parkingMeter.GetMinutesPurchased();
-
-        return parkedMinutes > purchasedMinutes;
+        if (parkingMeter.GetMinutesPurchased() < parkedCar.GetParkedMinutes() && !parkedCar.GetTicketed())
+            return true;
+        else
+            return false;
     }
 
+    // This method issues a ParkingTicket given a ParkedCar and ParkingMeter object
     public ParkingTicket IssueParkingTicket(ParkedCar parkedCar, ParkingMeter parkingMeter)
     {
-        int parkedMinutes = parkedCar.GetParkedMinutes();
-        int purchasedMinutes = parkingMeter.GetMinutesPurchased();
+        int MinutesOver = parkedCar.GetParkedMinutes() - parkingMeter.GetMinutesPurchased();
+        ParkingTicket ticket = new ParkingTicket(parkedCar, MinutesOver, name, badgeNumber);
 
-        int minutesOverParked = parkedMinutes - purchasedMinutes;
-        decimal fineAmount = 25m + minutesOverParked * 0.16m;
-
-        ParkingTicket ticket = new ParkingTicket(parkedCar, this, minutesOverParked, fineAmount);
-        
         return ticket;
     }
 }
