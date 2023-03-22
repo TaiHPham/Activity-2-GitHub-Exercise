@@ -87,7 +87,11 @@ namespace ParkingViolations
         
         public void advanceRound()
         {
+             // Increment minutes elapsed.
             minutesElapsed += 10;
+            
+            // Check if the minute is 50. If so, reset the minute and increment the hour.
+           
             if (minute == 50)
             {
                 minute = 0;
@@ -99,21 +103,26 @@ namespace ParkingViolations
             else
                 minute += 10;
 
-            //Assuming 10 parking spots
+            // Assuming there are 10 parking spots, move the officer to the next spot.
             if (officerLocation == 9)
                 officerLocation = 0;
             else
                 officerLocation++;
         }
+        
+        // This method returns the current time in a formatted string.
         public string getTime()
         {
             string returnString;
             string minuteString;
+            
+              // Format the minute as a string with leading 0 if necessary.
             if (minute == 0)
                 minuteString = "00";
             else
                 minuteString = minute.ToString();
-
+            
+            // Format the hour as a string with AM/PM designation.
             if (hour == 0)
                 returnString = "12:" + minuteString + " AM";
             else if (hour > 0 && hour < 12)
@@ -122,30 +131,42 @@ namespace ParkingViolations
                 returnString = hour.ToString() + ":" + minuteString + " PM";
             else
                 returnString = (hour - 12).ToString() + ":" + minuteString + " PM";
+            
+             // Return the formatted time string.
             return returnString;
         }
+        // This method simulates the specified number of rounds of the parking lot scenario.
         public void Simulate(int Rounds)
         {
+            // Create lists of parked cars and parking meters.
             List<ParkedCar> Cars = new List<ParkedCar>() { car1, car2, car3, car4, car5, car6, car7, car8, car9, car10 };
             List<ParkingMeter> Meters = new List<ParkingMeter>() { meter1, meter2, meter3, meter4, meter5, meter6, meter7, meter8, meter9, meter10 };
-
+            // Loop through the specified number of rounds.
             while (Rounds > 0)
             {
+                // Decrement rounds, pause for 1.5 seconds, and output the current time.
                 --Rounds;
                 Thread.Sleep(1500);
                 Console.WriteLine("Time: " + getTime());
+                
+                  // Check the current parking spot for violations.
                 Console.WriteLine("Inspecting Spot #" + (officerLocation +1).ToString());
                 if(cop.CheckForViolation(Cars[officerLocation], Meters[officerLocation]) == true)
                 {
+                    
+                    // If a violation is detected, issue a parking ticket.
                     Console.WriteLine("Issuing Citation\n----------------");
                     cop.IssueParkingTicket(Cars[officerLocation], Meters[officerLocation]);
                     Console.WriteLine("\n\n");
                 }
                 else
                 {
+                    // If no violation is detected, output a message.
                     Console.WriteLine("No violation detected.\n\n");
                 }
 
+                // Advance the simulation by one round and add 10 minutes to each parked car's time.
+       
                 advanceRound();
                 foreach (ParkedCar car in Cars)
                     car.AddParkedMinutes(10);
@@ -155,8 +176,10 @@ namespace ParkingViolations
         }
     }
 
+    // This class represents a parked car.
     class ParkedCar
     {
+         // Private fields for make, model, color, license number, and time parked.
         private string make;
         private string model;
         private string color;
