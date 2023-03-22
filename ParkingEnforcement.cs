@@ -5,8 +5,8 @@
  * The program creates 10 parked cars, each with their own parking meter. The officer checks
  * each parking spot and issues citations to cars that have expired meters.
  * 
- * Author: [Your Name]
- * Date: [Current Date]
+ * Author: Hope Bullock, Mason Lee, Tai Pham, Paul Strait [Group 10]
+ * Date: March 21, 2023
  */
 
 using System;
